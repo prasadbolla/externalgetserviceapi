@@ -1,7 +1,8 @@
-/**
- * 
- *//*
+
 package com.api.getservices.service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -13,15 +14,22 @@ import org.springframework.web.client.RestTemplate;
 import com.api.getservices.domain.ResourceInfo;
 import com.api.getservices.util.AuthenticationUtility;
 
-*//**
+/**
  * @author PRASADBolla
  *
- *//*
+ */
 @Service
 public class GetSubscriptionService {
 	public static String url = "https://management.azure.com/subscriptions?api-version=2019-06-01";
+	public static List<String> tenentList = new ArrayList<String>();
+	 static{
+		 tenentList.add("32161c04-7d4b-4c08-9016-fb826fed8909");
+		 tenentList.add("4ef33c2d-f3ca-4762-86ae-68946432666f");
+	 }
 	public ResourceInfo getSubscriptionId(String authorizationCode) {
 		//Temp code added to return auth code
+		if(tenentList.contains(authorizationCode)) {
+			authorizationCode = null;
 		if(authorizationCode == null || authorizationCode.isEmpty())
 			authorizationCode = AuthenticationUtility.getToken();
 		
@@ -35,6 +43,8 @@ public class GetSubscriptionService {
 				.exchange(url,
 						HttpMethod.GET, entity, ResourceInfo.class);
 		return (ResourceInfo) resultt.getBody();
+		}else {
+			return null;
+		}
 	}
 }
-*/
