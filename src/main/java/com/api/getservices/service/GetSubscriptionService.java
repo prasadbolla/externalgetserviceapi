@@ -26,6 +26,21 @@ public class GetSubscriptionService {
 		 tenentList.add("32161c04-7d4b-4c08-9016-fb826fed8909");
 		 tenentList.add("4ef33c2d-f3ca-4762-86ae-68946432666f");
 	 }
+		public ResourceInfo getSubscription(String authorizationCode) {		
+			RestTemplate restTemplate = new RestTemplate();
+			HttpHeaders headers = new HttpHeaders();
+			headers.set("Authorization", "Bearer " + authorizationCode);
+			HttpEntity<String> entity = new HttpEntity<String>("parameters",
+					headers);
+
+			ResponseEntity<ResourceInfo> resultt = restTemplate
+					.exchange(url,
+							HttpMethod.GET, entity, ResourceInfo.class);
+			if(resultt != null && resultt.getBody() != null)
+			return (ResourceInfo) resultt.getBody();
+			
+			return null;
+		}
 	public ResourceInfo getSubscriptionId(String authorizationCode) {
 		//Temp code added to return auth code
 		if(tenentList.contains(authorizationCode)) {

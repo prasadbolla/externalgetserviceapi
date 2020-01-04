@@ -37,11 +37,11 @@ public class GetServiceInfoController {
 
 	}
 //Added for future use
-	@GetMapping(value = "/services/{tenentId}/{serviceType}")
+	@GetMapping(value = "/subscriptions/subscription")
 	public ResponseEntity<ResourceInfo> getSubscriptionIdBasedOnAuth(
 			@RequestHeader String authorizationCode) {
 		return ResponseEntity.ok(getSubscriptionService
-				.getSubscriptionId(authorizationCode));
+				.getSubscription(authorizationCode));
 
 	}
 	@GetMapping(value = "/subscriptions/{tenentId}")
