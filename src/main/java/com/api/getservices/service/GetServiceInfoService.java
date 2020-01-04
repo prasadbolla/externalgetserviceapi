@@ -8,11 +8,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.api.getservices.configuration.ConfigurationManager;
 import com.api.getservices.domain.Category;
 import com.api.getservices.domain.GetServiceInfoResponse;
+import com.api.getservices.domain.ResourceInfo;
+import com.api.getservices.util.AuthenticationUtility;
 
 /**
  * @author PRASADBolla
@@ -27,7 +34,7 @@ public class GetServiceInfoService {
 	@Autowired
 	public ConfigurationManager configurationManager;
 	final String ROOT_URI = "https://management.azure.com/subscriptions?api-version=2019-06-01";
-
+	public static RestTemplate restTemplate = new RestTemplate();
 	public static List<GetServiceInfoResponse> getServiceInfoList = new ArrayList<GetServiceInfoResponse>();
 	public static List<Category> categories = new ArrayList<Category>();
 /*	static {
@@ -124,31 +131,27 @@ public class GetServiceInfoService {
 	 */
 	public GetServiceInfoResponse getGetServiceInfoList(String tenentId) {
 		
-/*		if(bearerCode == null || bearerCode.isEmpty())
-			bearerCode = AuthenticationUtility.getToken();
-		
-		GetSubscriptionService getSubscriptionService = new GetSubscriptionService();
-	    ResourceInfo info = getSubscriptionService.getSubscriptionId(bearerCode);
-	    String subscriptionId = info.getValue()[0].getSubscriptionId();
-	    
-		//Temp code added to return auth code
-	    bearerCode = AuthenticationUtility.getToken();
-		
-	    String uri = "https://management.azure.com/subscriptions/" + subscriptionId + "/resources?api-version=2019-08-01";
-	    System.out.println(uri);
-	    System.out.println("https://management.azure.com/subscriptions/543ab7b3-dbaa-4aba-8568-2fd96b773904/resources?api-version=2019-08-01");
-	    RestTemplate restTemplate = new RestTemplate();
-	    HttpHeaders headers = new HttpHeaders();
-	    headers.set("Authorization", bearerCode);
-	    HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
-	     
-	    ResponseEntity<ResourceInfo> result = restTemplate.exchange(uri, HttpMethod.GET, entity, ResourceInfo.class);*/
 		if(categories.isEmpty())
 			getAvailableResourceList();
 		
 		return new GetServiceInfoResponse(categories);
 	}
-	
+
+	public ResourceInfo getGetServiceInformation(String subscriptionId,
+			String authorizationCode) {
+
+		String uri = "https://management.azure.com/subscriptions/"
+				+ subscriptionId + "/resources?api-version=2019-08-01";
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Authorization", "Bearer " + authorizationCode);
+		HttpEntity<String> entity = new HttpEntity<String>("parameters",
+				headers);
+
+		ResponseEntity<ResourceInfo> result = restTemplate.exchange(uri,
+				HttpMethod.GET, entity, ResourceInfo.class);
+
+		return result.getBody();
+	}
 /*	
 	public static void main(String a[]){
 		GetServiceInfoService getServiceInfoService = new GetServiceInfoService();
