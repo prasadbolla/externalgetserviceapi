@@ -1,0 +1,13 @@
+adapter:
+    property:
+      getResourceList:
+        serverUrl: https://management.azure.com/subscriptions/
+        readTimeout: 30
+        connectTimeout: 10
+        urlVersion: /resources?api-version=2019-08-01
+      getSubscription:
+        serverUrl: https://management.azure.com/
+        readTimeout: 30
+        connectTimeout: 10
+        urlVersion: subscriptions?api-version=2019-06-01
+        

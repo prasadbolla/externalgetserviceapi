@@ -15,11 +15,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.api.getservices.configuration.AdapterConf;
 import com.api.getservices.configuration.ConfigurationManager;
 import com.api.getservices.domain.Category;
 import com.api.getservices.domain.GetServiceInfoResponse;
 import com.api.getservices.domain.ResourceInfo;
-import com.api.getservices.util.AuthenticationUtility;
 
 /**
  * @author PRASADBolla
@@ -33,16 +33,13 @@ public class GetServiceInfoService {
 	
 	@Autowired
 	public ConfigurationManager configurationManager;
+	@Autowired
+	public AdapterConf adapterConf;
+	
 	final String ROOT_URI = "https://management.azure.com/subscriptions?api-version=2019-06-01";
 	public static RestTemplate restTemplate = new RestTemplate();
 	public static List<GetServiceInfoResponse> getServiceInfoList = new ArrayList<GetServiceInfoResponse>();
 	public static List<Category> categories = new ArrayList<Category>();
-/*	static {
-		getServiceInfoList.add(new GetServiceInfoResponse("1", "Azure Sql DB", "active", "12345"));
-		getServiceInfoList.add(new GetServiceInfoResponse("2", "Azure  xx DB", "active", "12345"));
-		getServiceInfoList.add(new GetServiceInfoResponse("3", "Azure xxx DB", "active", "12345"));
-		getServiceInfoList.add(new GetServiceInfoResponse("4", "Azure xxx DB", "active", "12345"));
-	}*/
 	public void getAvailableResourceList() {
 		
 		categories.add(new Category("Compute",
@@ -152,9 +149,24 @@ public class GetServiceInfoService {
 
 		return result.getBody();
 	}
-/*	
+	//implementation required to return selected and available services
+	public ResourceInfo getServices(String subscriptionId,
+			String authorizationCode) {
+
+		String uri = "https://management.azure.com/subscriptions/"
+				+ subscriptionId + "/resources?api-version=2019-08-01";
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Authorization", "Bearer " + authorizationCode);
+		HttpEntity<String> entity = new HttpEntity<String>("parameters",
+				headers);
+
+		ResponseEntity<ResourceInfo> result = restTemplate.exchange(uri,
+				HttpMethod.GET, entity, ResourceInfo.class);
+
+		return result.getBody();
+	}
 	public static void main(String a[]){
 		GetServiceInfoService getServiceInfoService = new GetServiceInfoService();
 		getServiceInfoService.getAvailableResourceList();
-	}*/
+	}
 }

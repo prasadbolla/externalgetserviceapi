@@ -65,6 +65,13 @@ public class GetServiceInfoController {
 		return ResponseEntity.ok(getServiceInfoService.getGetServiceInformation(subscriptionId,authorizationCode));
 
 	}
+	//real api.. 
+	@GetMapping("services/{subscriptionIdentifier}")
+	public ResponseEntity<ResourceInfo> getServicesBySubscriptionIdentifier(
+			@PathVariable String subscriptionId, @RequestHeader String authorizationCode) {
+		return ResponseEntity.ok(getServiceInfoService.getServices(subscriptionId,authorizationCode));
+	}
+	
 	//dummy
 	@GetMapping(value = "/subscriptions/{tenentId}")
 	public ResponseEntity<ResourceInfo> getSubscriptionId(
