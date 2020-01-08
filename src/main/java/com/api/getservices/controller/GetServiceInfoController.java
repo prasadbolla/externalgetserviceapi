@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.api.getservices.domain.ClientInfo;
 import com.api.getservices.domain.GetServiceInfoResponse;
+import com.api.getservices.domain.ResourceGroupList;
 import com.api.getservices.domain.ResourceInfo;
 import com.api.getservices.service.ClientInfoService;
 import com.api.getservices.service.GetServiceInfoService;
@@ -65,6 +66,14 @@ public class GetServiceInfoController {
 		return ResponseEntity.ok(getServiceInfoService.getGetServiceInformation(subscriptionId,authorizationCode));
 
 	}
+	
+	@GetMapping(value = "/services/service/{subscriptionId}/resourceGroups")
+	public ResponseEntity<ResourceGroupList> getResourcesGroupsBySubscriptionId(
+			@PathVariable String subscriptionId, @RequestHeader String authorizationCode) {
+		return ResponseEntity.ok(getServiceInfoService.getResourceGroups(subscriptionId,authorizationCode));
+
+	}
+	
 	//real api.. 
 	@GetMapping("services/{subscriptionIdentifier}")
 	public ResponseEntity<ResourceInfo> getServicesBySubscriptionIdentifier(

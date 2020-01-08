@@ -19,6 +19,7 @@ import com.api.getservices.configuration.AdapterConf;
 import com.api.getservices.configuration.ConfigurationManager;
 import com.api.getservices.domain.Category;
 import com.api.getservices.domain.GetServiceInfoResponse;
+import com.api.getservices.domain.ResourceGroupList;
 import com.api.getservices.domain.ResourceInfo;
 
 /**
@@ -149,6 +150,24 @@ public class GetServiceInfoService {
 
 		return result.getBody();
 	}
+	
+	public ResourceGroupList getResourceGroups(String subscriptionId,
+			String authorizationCode) {
+
+		String uri = "https://management.azure.com/subscriptions/"
+				+ subscriptionId + "/resourcegroups?api-version=2019-08-01";
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Authorization", "Bearer " + authorizationCode);
+		HttpEntity<String> entity = new HttpEntity<String>("parameters",
+				headers);
+
+		ResponseEntity<ResourceGroupList> result = restTemplate.exchange(uri,
+				HttpMethod.GET, entity, ResourceGroupList.class);
+
+		return result.getBody();
+	}
+	
+	
 	//implementation required to return selected and available services
 	public ResourceInfo getServices(String subscriptionId,
 			String authorizationCode) {
