@@ -37,12 +37,15 @@ public class GetServiceInfoController {
 	public ClientInfoService clientInfoService;
 	
 	//dummy
-	@GetMapping(value = "/services/{tenentId}")
-	public ResponseEntity<GetServiceInfoResponse> getServiceInfo(
-			@PathVariable String tenentId) {
-		return ResponseEntity.ok(getServiceInfoService.getGetServiceInfoList(tenentId));
-
-	}
+	/*
+	 * @GetMapping(value = "/services/{tenentId}") public
+	 * ResponseEntity<GetServiceInfoResponse> getServiceInfo(
+	 * 
+	 * @PathVariable String tenentId) { return
+	 * ResponseEntity.ok(getServiceInfoService.getGetServiceInfoList(tenentId));
+	 * 
+	 * }
+	 */
 	//real api's
 	@GetMapping(value = "/subscriptions/subscription")
 	public ResponseEntity<ResourceInfo> getSubscriptionIdBasedOnAuth(
@@ -75,10 +78,10 @@ public class GetServiceInfoController {
 	}
 	
 	//real api.. 
-	@GetMapping("services/{subscriptionIdentifier}")
+	@GetMapping("/services/{subscriptionIdentifier}")
 	public ResponseEntity<ResourceInfo> getServicesBySubscriptionIdentifier(
-			@PathVariable String subscriptionId, @RequestHeader String authorizationCode) {
-		return ResponseEntity.ok(getServiceInfoService.getServices(subscriptionId,authorizationCode));
+			@PathVariable String subscriptionIdentifier, @RequestHeader String authorizationCode) {
+		return ResponseEntity.ok(getServiceInfoService.getServices(subscriptionIdentifier,authorizationCode));
 	}
 	
 	//dummy
